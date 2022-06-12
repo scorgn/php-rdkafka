@@ -1,4 +1,5 @@
 $ErrorActionPreference = "Stop"
+Set-PSDebug -Trace 1
 
 if (-not (Test-Path 'C:\build-cache')) {
     [void](New-Item 'C:\build-cache' -ItemType 'directory')
