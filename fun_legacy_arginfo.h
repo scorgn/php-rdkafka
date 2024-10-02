@@ -22,7 +22,6 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_rd_kafka_thread_cnt arginfo_rd_kafka_get_err_descs
 
-
 ZEND_FUNCTION(rd_kafka_get_err_descs);
 ZEND_FUNCTION(rd_kafka_err2name);
 ZEND_FUNCTION(rd_kafka_err2str);
@@ -31,13 +30,20 @@ ZEND_FUNCTION(rd_kafka_errno);
 ZEND_FUNCTION(rd_kafka_offset_tail);
 ZEND_FUNCTION(rd_kafka_thread_cnt);
 
-
 static const zend_function_entry ext_functions[] = {
 	ZEND_FE(rd_kafka_get_err_descs, arginfo_rd_kafka_get_err_descs)
 	ZEND_FE(rd_kafka_err2name, arginfo_rd_kafka_err2name)
 	ZEND_FE(rd_kafka_err2str, arginfo_rd_kafka_err2str)
-	ZEND_DEP_FE(rd_kafka_errno2err, arginfo_rd_kafka_errno2err)
-	ZEND_DEP_FE(rd_kafka_errno, arginfo_rd_kafka_errno)
+#if (PHP_VERSION_ID >= 80400)
+	ZEND_RAW_FENTRY("rd_kafka_errno2err", zif_rd_kafka_errno2err, arginfo_rd_kafka_errno2err, ZEND_ACC_DEPRECATED, NULL, NULL)
+#else
+	ZEND_RAW_FENTRY("rd_kafka_errno2err", zif_rd_kafka_errno2err, arginfo_rd_kafka_errno2err, ZEND_ACC_DEPRECATED)
+#endif
+#if (PHP_VERSION_ID >= 80400)
+	ZEND_RAW_FENTRY("rd_kafka_errno", zif_rd_kafka_errno, arginfo_rd_kafka_errno, ZEND_ACC_DEPRECATED, NULL, NULL)
+#else
+	ZEND_RAW_FENTRY("rd_kafka_errno", zif_rd_kafka_errno, arginfo_rd_kafka_errno, ZEND_ACC_DEPRECATED)
+#endif
 	ZEND_FE(rd_kafka_offset_tail, arginfo_rd_kafka_offset_tail)
 	ZEND_FE(rd_kafka_thread_cnt, arginfo_rd_kafka_thread_cnt)
 	ZEND_FE_END

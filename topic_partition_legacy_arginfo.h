@@ -28,7 +28,6 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_RdKafka_TopicPartition_getErr arginfo_class_RdKafka_TopicPartition_getTopic
 
-
 ZEND_METHOD(RdKafka_TopicPartition, __construct);
 ZEND_METHOD(RdKafka_TopicPartition, getTopic);
 ZEND_METHOD(RdKafka_TopicPartition, setTopic);
@@ -37,7 +36,6 @@ ZEND_METHOD(RdKafka_TopicPartition, setPartition);
 ZEND_METHOD(RdKafka_TopicPartition, getOffset);
 ZEND_METHOD(RdKafka_TopicPartition, setOffset);
 ZEND_METHOD(RdKafka_TopicPartition, getErr);
-
 
 static const zend_function_entry class_RdKafka_TopicPartition_methods[] = {
 	ZEND_ME(RdKafka_TopicPartition, __construct, arginfo_class_RdKafka_TopicPartition___construct, ZEND_ACC_PUBLIC)
@@ -56,7 +54,11 @@ static zend_class_entry *register_class_RdKafka_TopicPartition(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "TopicPartition", class_RdKafka_TopicPartition_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
+#endif
 
 	return class_entry;
 }

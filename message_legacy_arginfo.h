@@ -4,9 +4,7 @@
 ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RdKafka_Message_errstr, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-
 ZEND_METHOD(RdKafka_Message, errstr);
-
 
 static const zend_function_entry class_RdKafka_Message_methods[] = {
 	ZEND_ME(RdKafka_Message, errstr, arginfo_class_RdKafka_Message_errstr, ZEND_ACC_PUBLIC)
@@ -18,7 +16,11 @@ static zend_class_entry *register_class_RdKafka_Message(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "Message", class_RdKafka_Message_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
+#endif
 
 	zval property_err_default_value;
 	ZVAL_NULL(&property_err_default_value);
@@ -58,9 +60,7 @@ static zend_class_entry *register_class_RdKafka_Message(void)
 
 	zval property_key_default_value;
 	ZVAL_NULL(&property_key_default_value);
-	zend_string *property_key_name = zend_string_init("key", sizeof("key") - 1, 1);
-	zend_declare_property_ex(class_entry, property_key_name, &property_key_default_value, ZEND_ACC_PUBLIC, NULL);
-	zend_string_release(property_key_name);
+	zend_declare_property_ex(class_entry, ZSTR_KNOWN(ZEND_STR_KEY), &property_key_default_value, ZEND_ACC_PUBLIC, NULL);
 
 	zval property_offset_default_value;
 	ZVAL_NULL(&property_offset_default_value);

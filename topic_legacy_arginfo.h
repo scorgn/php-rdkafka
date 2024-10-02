@@ -67,7 +67,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_class_RdKafka_ProducerTopic_producev, 0, 0, 2)
 ZEND_END_ARG_INFO()
 #endif
 
-
 ZEND_METHOD(RdKafka_Topic, getName);
 ZEND_METHOD(RdKafka, __construct);
 ZEND_METHOD(RdKafka_ConsumerTopic, consumeQueueStart);
@@ -82,15 +81,17 @@ ZEND_METHOD(RdKafka_ProducerTopic, produce);
 ZEND_METHOD(RdKafka_ProducerTopic, producev);
 #endif
 
-
 static const zend_function_entry class_RdKafka_Topic_methods[] = {
 	ZEND_ME(RdKafka_Topic, getName, arginfo_class_RdKafka_Topic_getName, ZEND_ACC_PUBLIC)
 	ZEND_FE_END
 };
 
-
 static const zend_function_entry class_RdKafka_ConsumerTopic_methods[] = {
-	ZEND_MALIAS(RdKafka, __construct, __construct, arginfo_class_RdKafka_ConsumerTopic___construct, ZEND_ACC_PRIVATE)
+#if (PHP_VERSION_ID >= 80400)
+	ZEND_RAW_FENTRY("__construct", zim_RdKafka___construct, arginfo_class_RdKafka_ConsumerTopic___construct, ZEND_ACC_PRIVATE, NULL, NULL)
+#else
+	ZEND_RAW_FENTRY("__construct", zim_RdKafka___construct, arginfo_class_RdKafka_ConsumerTopic___construct, ZEND_ACC_PRIVATE)
+#endif
 	ZEND_ME(RdKafka_ConsumerTopic, consumeQueueStart, arginfo_class_RdKafka_ConsumerTopic_consumeQueueStart, ZEND_ACC_PUBLIC)
 	ZEND_ME(RdKafka_ConsumerTopic, consumeCallback, arginfo_class_RdKafka_ConsumerTopic_consumeCallback, ZEND_ACC_PUBLIC)
 	ZEND_ME(RdKafka_ConsumerTopic, consumeStart, arginfo_class_RdKafka_ConsumerTopic_consumeStart, ZEND_ACC_PUBLIC)
@@ -101,16 +102,26 @@ static const zend_function_entry class_RdKafka_ConsumerTopic_methods[] = {
 	ZEND_FE_END
 };
 
-
 static const zend_function_entry class_RdKafka_KafkaConsumerTopic_methods[] = {
-	ZEND_MALIAS(RdKafka, __construct, __construct, arginfo_class_RdKafka_KafkaConsumerTopic___construct, ZEND_ACC_PRIVATE)
-	ZEND_MALIAS(RdKafka_ConsumerTopic, offsetStore, offsetStore, arginfo_class_RdKafka_KafkaConsumerTopic_offsetStore, ZEND_ACC_PUBLIC)
+#if (PHP_VERSION_ID >= 80400)
+	ZEND_RAW_FENTRY("__construct", zim_RdKafka___construct, arginfo_class_RdKafka_KafkaConsumerTopic___construct, ZEND_ACC_PRIVATE, NULL, NULL)
+#else
+	ZEND_RAW_FENTRY("__construct", zim_RdKafka___construct, arginfo_class_RdKafka_KafkaConsumerTopic___construct, ZEND_ACC_PRIVATE)
+#endif
+#if (PHP_VERSION_ID >= 80400)
+	ZEND_RAW_FENTRY("offsetStore", zim_RdKafka_ConsumerTopic_offsetStore, arginfo_class_RdKafka_KafkaConsumerTopic_offsetStore, ZEND_ACC_PUBLIC, NULL, NULL)
+#else
+	ZEND_RAW_FENTRY("offsetStore", zim_RdKafka_ConsumerTopic_offsetStore, arginfo_class_RdKafka_KafkaConsumerTopic_offsetStore, ZEND_ACC_PUBLIC)
+#endif
 	ZEND_FE_END
 };
 
-
 static const zend_function_entry class_RdKafka_ProducerTopic_methods[] = {
-	ZEND_MALIAS(RdKafka, __construct, __construct, arginfo_class_RdKafka_ProducerTopic___construct, ZEND_ACC_PRIVATE)
+#if (PHP_VERSION_ID >= 80400)
+	ZEND_RAW_FENTRY("__construct", zim_RdKafka___construct, arginfo_class_RdKafka_ProducerTopic___construct, ZEND_ACC_PRIVATE, NULL, NULL)
+#else
+	ZEND_RAW_FENTRY("__construct", zim_RdKafka___construct, arginfo_class_RdKafka_ProducerTopic___construct, ZEND_ACC_PRIVATE)
+#endif
 	ZEND_ME(RdKafka_ProducerTopic, produce, arginfo_class_RdKafka_ProducerTopic_produce, ZEND_ACC_PUBLIC)
 #if defined(HAVE_RD_KAFKA_MESSAGE_HEADERS)
 	ZEND_ME(RdKafka_ProducerTopic, producev, arginfo_class_RdKafka_ProducerTopic_producev, ZEND_ACC_PUBLIC)
@@ -123,8 +134,12 @@ static zend_class_entry *register_class_RdKafka_Topic(void)
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "Topic", class_RdKafka_Topic_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, NULL, ZEND_ACC_ABSTRACT);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, NULL);
 	class_entry->ce_flags |= ZEND_ACC_ABSTRACT;
+#endif
 
 	return class_entry;
 }
@@ -134,7 +149,11 @@ static zend_class_entry *register_class_RdKafka_ConsumerTopic(zend_class_entry *
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "ConsumerTopic", class_RdKafka_ConsumerTopic_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, class_entry_RdKafka_Topic, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, class_entry_RdKafka_Topic);
+#endif
 
 	return class_entry;
 }
@@ -144,7 +163,11 @@ static zend_class_entry *register_class_RdKafka_KafkaConsumerTopic(zend_class_en
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "KafkaConsumerTopic", class_RdKafka_KafkaConsumerTopic_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, class_entry_RdKafka_Topic, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, class_entry_RdKafka_Topic);
+#endif
 
 	return class_entry;
 }
@@ -154,7 +177,11 @@ static zend_class_entry *register_class_RdKafka_ProducerTopic(zend_class_entry *
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "ProducerTopic", class_RdKafka_ProducerTopic_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, class_entry_RdKafka_Topic, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, class_entry_RdKafka_Topic);
+#endif
 
 	return class_entry;
 }

@@ -19,13 +19,11 @@ ZEND_END_ARG_INFO()
 
 #define arginfo_class_RdKafka_KafkaErrorException_transactionRequiresAbort arginfo_class_RdKafka_KafkaErrorException_getErrorString
 
-
 ZEND_METHOD(RdKafka_KafkaErrorException, __construct);
 ZEND_METHOD(RdKafka_KafkaErrorException, getErrorString);
 ZEND_METHOD(RdKafka_KafkaErrorException, isFatal);
 ZEND_METHOD(RdKafka_KafkaErrorException, isRetriable);
 ZEND_METHOD(RdKafka_KafkaErrorException, transactionRequiresAbort);
-
 
 static const zend_function_entry class_RdKafka_KafkaErrorException_methods[] = {
 	ZEND_ME(RdKafka_KafkaErrorException, __construct, arginfo_class_RdKafka_KafkaErrorException___construct, ZEND_ACC_PUBLIC)
@@ -41,7 +39,11 @@ static zend_class_entry *register_class_RdKafka_KafkaErrorException(zend_class_e
 	zend_class_entry ce, *class_entry;
 
 	INIT_NS_CLASS_ENTRY(ce, "RdKafka", "KafkaErrorException", class_RdKafka_KafkaErrorException_methods);
+#if (PHP_VERSION_ID >= 80400)
+	class_entry = zend_register_internal_class_with_flags(&ce, class_entry_RdKafka_Exception, 0);
+#else
 	class_entry = zend_register_internal_class_ex(&ce, class_entry_RdKafka_Exception);
+#endif
 
 	zval property_error_string_default_value;
 	ZVAL_NULL(&property_error_string_default_value);
