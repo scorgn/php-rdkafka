@@ -37,13 +37,13 @@ kakfa_ready=0
 kafka_oauth2_ready=0
 
 for i in $(seq 1 20); do
-    if [[ $kafka_ready -eq 0 ]]; then
+    if [ $kafka_ready -eq 0 ]; then
         if kafkacat -b 127.0.0.1 -L; then
             kafka_ready=1
             echo "Kafka is ready"
         fi
     fi
-    if [[ $kafka_oauth2_ready -eq 0 ]]; then
+    if [ $kafka_oauth2_ready -eq 0 ]; then
         if kafkacat -b kafka_oauth2:29092 \
             -X security.protocol=SASL_PLAINTEXT \
             -X sasl.mechanisms=OAUTHBEARER \
@@ -55,7 +55,7 @@ for i in $(seq 1 20); do
         fi
     fi
 
-    if [[ $kafka_ready -eq 1 && $kafka_oauth2_ready -eq 1 ]]; then
+    if [ $kafka_ready -eq 1 ] && [ $kafka_oauth2_ready -eq 1 ]; then
       exit 0
     fi
 done
