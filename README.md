@@ -349,3 +349,4 @@ Authors: see [contributors](https://github.com/arnaud-lb/php-rdkafka/graphs/cont
 ## License
 
 php-rdkafka is released under the [MIT](https://github.com/arnaud-lb/php-rdkafka/blob/master/LICENSE) license.
+
